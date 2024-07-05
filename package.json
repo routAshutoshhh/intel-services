@@ -1,0 +1,23 @@
+{
+  "name": "intel-project",
+  "version": "1.0.0",
+  "description": "common services for common people",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anw1702/intel-services.git"
+  },
+  "author": "Anwesha Nema",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anw1702/intel-services/issues"
+  },
+  "homepage": "https://github.com/anw1702/intel-services#readme",
+  "dependencies": {
+    "express": "^4.19.2",
+    "pg": "^8.12.0"
+  }
+}

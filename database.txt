@@ -1,0 +1,97 @@
+Consumer Database Schema
+ CREATE TABLE consumers (
+     id SERIAL PRIMARY KEY,
+     name VARCHAR(255),
+     username VARCHAR(255) UNIQUE,
+     password VARCHAR(255),
+     phonenumber VARCHAR(15),
+     dateofbirth DATE
+ );
+
+ Service Providers Database Schema
+ CREATE TABLE service_providers (
+     id SERIAL PRIMARY KEY,
+     name VARCHAR(255),
+     service_industry VARCHAR(255),
+     company_name VARCHAR(255),
+     phone_number VARCHAR(15),
+     password VARCHAR(255)
+ );
+
+CREATE TABLE restaurant_name (
+     shop_id SERIAL PRIMARY KEY,
+     shop_name VARCHAR(255),
+     owner_name VARCHAR(255),
+     address TEXT,
+     contact_number VARCHAR(15),
+     email VARCHAR(255)
+ );
+
+CREATE TABLE stationary_shops (
+     shop_id SERIAL PRIMARY KEY,
+     shop_name VARCHAR(255),
+     owner_name VARCHAR(255),
+     address TEXT,
+     contact_number VARCHAR(15),
+     email VARCHAR(255)
+ );
+
+ CREATE TABLE food_menu (
+     id SERIAL PRIMARY KEY,
+     restaurant VARCHAR(255),
+     menu_item VARCHAR(255),
+     location VARCHAR(255),
+     phone_number VARCHAR(15),
+     price NUMERIC,
+     rating INTEGER
+ );
+
+CREATE TABLE inventory_items (
+     item_id SERIAL PRIMARY KEY,
+     shop_id INTEGER REFERENCES stationary_shops(shop_id),
+     item_name VARCHAR(255),
+     quantity INTEGER,
+     cost_price NUMERIC,
+     sale_price NUMERIC,
+     description TEXT
+ );
+
+CREATE TABLE cart (
+     id SERIAL PRIMARY KEY,
+     consumer_id INTEGER REFERENCES consumers(id),
+     menu_item_id INTEGER REFERENCES food_menu(id),
+     quantity INTEGER,
+     special_instructions TEXT
+ );
+
+CREATE TABLE stat_cart (
+     id SERIAL PRIMARY KEY,
+     consumer_id INTEGER REFERENCES consumers(id),
+     stationary_item_id INTEGER REFERENCES inventory_items(id),
+     quantity INTEGER,
+     special_instructions TEXT
+ );
+
+ CREATE TABLE orders (
+     id SERIAL PRIMARY KEY,
+     consumer_id INTEGER REFERENCES consumers(id),
+     total_price NUMERIC,
+     status TEXT,
+     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+ );
+
+ CREATE TABLE stat_orders (
+     purchase_id SERIAL PRIMARY KEY,
+     user_id INTEGER REFERENCES consumers(id),
+     item_id INTEGER REFERENCES inventory_items(item_id),
+     quantity INTEGER,
+     purchase_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+ );
+
+
+CREATE TABLE order_tracking (
+     id SERIAL PRIMARY KEY,
+     order_id INTEGER REFERENCES orders(id),
+     current_location TEXT,
+     estimated_arrival TIMESTAMP
+ );
