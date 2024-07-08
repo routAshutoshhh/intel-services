@@ -1,14 +1,44 @@
 import express from "express";
 import bodyParser from "body-parser";
 import pg from "pg";
+import pgPromise from 'pg-promise';
+const pgp = pgPromise();
+// Create a database connection
+const db = pgp('postgres://newuser:newintel@localhost:5432/intel');
 
-const db = new pg.Client({
-  user: "newuser",
-  host: "localhost",
-  database: "intel",
-  password: "newintel",
-  port: 5432
-});
+
+//const db = require('pg-promise')();
+// const connection = {
+//     host: 'localhost',
+//     port: 5432, // PostgreSQL default port
+//     database: 'intel',
+//     user: 'newuser',
+//     password: 'newintel',
+// };
+
+// Test the connection
+async function testConnection() {
+    try {
+        const c = await db.connect(); // Try to connect
+        console.log('Postgres server version:', c.client.serverVersion);
+        c.done(); // Release the connection
+    } catch (error) {
+        console.error('Error connecting to the database:', error.message);
+    }
+}
+
+// Call the test function
+testConnection();
+
+
+
+// const db = new pg.Client({
+//   user: "newuser",
+//   host: "localhost",
+//   database: "intel",
+//   password: "newintel",
+//   port: 5432
+// });
 
 const app = express();
 const port = 3000;
