@@ -491,13 +491,14 @@ app.delete('/stationary-shops/:id', async (req, res) => {
     }
 });
 
-// Endpoint to add a new stationary item
+
+// Endpoint to add a new stationary item 
 app.post('/stationary-items', async (req, res) => {
-    const { shop_id, item_name, quantity, cost_price, sale_price, description } = req.body;
+    const { shop_id, item_name, quantity, cost_price, sale_price, description, image_data } = req.body;
     try {
         const newStationaryItem = await db.query(
-            'INSERT INTO inventory_items (shop_id, item_name, quantity, cost_price, sale_price, description) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-            [shop_id, item_name, quantity, cost_price, sale_price, description]
+            'INSERT INTO inventory_items (shop_id, item_name, quantity, cost_price, description, image_data) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+            [shop_id, item_name, quantity, cost_price, sale_price, description, image_data]
         );
         res.json(newStationaryItem.rows[0]);
     } catch (error) {
@@ -533,11 +534,11 @@ app.get('/stationary-items/:id', async (req, res) => {
 // Endpoint to update a stationary item by ID
 app.put('/stationary-items/:id', async (req, res) => {
     const itemId = req.params.id;
-    const { shop_id, item_name, quantity, cost_price, sale_price, description } = req.body;
+    const { shop_id, item_name, quantity, cost_price, sale_price, description, image_data } = req.body;
     try {
         const updatedStationaryItem = await db.query(
-            'UPDATE inventory_items SET shop_id = $1, item_name = $2, quantity = $3, cost_price = $4, sale_price = $5, description = $6 WHERE item_id = $7 RETURNING *',
-            [shop_id, item_name, quantity, cost_price, sale_price, description, itemId]
+            'UPDATE inventory_items SET shop_id = $1, item_name = $2, quantity = $3, cost_price = $4, description = $5, image_data = $6 WHERE item_id = $7 RETURNING *',
+            [shop_id, item_name, quantity, cost_price, sale_price, description, image_data, itemId]
         );
         if (updatedStationaryItem.rows.length === 0) {
             res.status(404).json({ error: 'Stationary item not found' });
@@ -563,14 +564,13 @@ app.delete('/stationary-items/:id', async (req, res) => {
         res.status(500).json({ error: 'Error deleting stationary item' });
     }
 });
-
 // Endpoint to add a new stationary cart item
 app.post('/stat-cart-items', async (req, res) => {
-    const { consumer_id, stationary_item_id, quantity, special_instruction } = req.body;
+    const { consumer_id, stationary_item_id, quantity, sale_price, special_instruction } = req.body;
     try {
         const newCartItem = await db.query(
-            'INSERT INTO stat_cart (consumer_id, stationary_item_id, quantity, special_instruction) VALUES ($1, $2, $3, $4) RETURNING *',
-            [consumer_id, stationary_item_id, quantity, special_instruction]
+            'INSERT INTO stat_cart (consumer_id, stationary_item_id, quantity, sale_price, special_instruction) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+            [consumer_id, stationary_item_id, quantity, sale_price, special_instruction]
         );
         res.json(newCartItem.rows[0]);
     } catch (error) {
@@ -609,7 +609,7 @@ app.put('/stat-cart-items/:id', async (req, res) => {
     const { consumer_id, stationary_item_id, quantity, special_instruction } = req.body;
     try {
         const updatedCartItem = await db.query(
-            'UPDATE stat_cart SET consumer_id = $1, stationary_item_id = $2, quantity = $3, special_instruction = $4 WHERE id = $5 RETURNING *',
+            'UPDATE stat_cart SET consumer_id = $1, stationary_item_id = $2, quantity = $3, sale_price= $4, special_instruction = $5 WHERE id = $6 RETURNING *',
             [consumer_id, stationary_item_id, quantity, special_instruction, cartItemId]
         );
         if (updatedCartItem.rows.length === 0) {

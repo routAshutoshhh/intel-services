@@ -69,6 +69,7 @@ CREATE TABLE stat_cart (
      consumer_id INTEGER REFERENCES consumers(id),
      stationary_item_id INTEGER REFERENCES inventory_items(id),
      quantity INTEGER,
+     sale_price NUMERIC,
      special_instructions TEXT
  );
 
